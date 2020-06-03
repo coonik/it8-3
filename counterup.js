@@ -2,7 +2,7 @@ function CountUp(initDate, id, msg){
   this.beginDate = new Date(initDate);
   this.msg = msg;
   this.numOfDays = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
-  this.borrowed = 0, this.months = 0, this.days = 0;
+  this.borrowed = 0, this.years = 0, this.months = 0, this.days = 0;
   this.hours = 0, this.minutes = 0, this.seconds = 0;
   this.updateNumOfDays();
   this.calculate(id);
@@ -39,24 +39,25 @@ CountUp.prototype.addLeadingZero=function(value){
 CountUp.prototype.calculate = function (id) {
     var currDate = new Date();
     var prevDate = this.beginDate;
-    this.years = this.datePartDiff(prevDate.getFullYear(), currDate.getFullYear());
-    this.months = this.datePartDiff(prevDate.getMonth()+1, currDate.getMonth()+1, 12) - 1;
-    this.days = this.datePartDiff(prevDate.getDate(), currDate.getDate(), this.numOfDays[currDate.getMonth()]);
-    this.hours = this.datePartDiff(prevDate.getHours(), currDate.getHours(), 24);
-    this.minutes = this.datePartDiff(prevDate.getMinutes(), currDate.getMinutes(), 60);
     this.seconds = this.datePartDiff(prevDate.getSeconds(), currDate.getSeconds(), 60);
-    
+    this.minutes = this.datePartDiff(prevDate.getMinutes(), currDate.getMinutes(), 60);
+    this.hours = this.datePartDiff(prevDate.getHours(), currDate.getHours(), 24);
+    this.days = this.datePartDiff(prevDate.getDate(), currDate.getDate(), this.numOfDays[currDate.getMonth()]);
+    this.months = this.datePartDiff(prevDate.getMonth(), currDate.getMonth(), 12);
+    this.years = this.datePartDiff(prevDate.getFullYear(), currDate.getFullYear(), 0);
+    this.formatTime();
+
     years = this.years !== 0 ? " <strong>" + this.years + "</strong> <small>năm</small>" : "";
     months = this.months !== 0 ? " <strong>" + this.months + "</strong> <small>tháng</small>" : "";
     days = this.days !== 0 ? " <strong>" + this.days + "</strong> <small>ngày</small>" : "";
-    hours = this.hours !== 0 ? " <strong>" + this.hours + "</strong> <small>giờ</small>" : "";
+    hours = this.hours !== "00" ? " <strong>" + this.hours + "</strong> <small>giờ</small>" : "";
     minutes = this.minutes !== 0 ? " <strong>" + this.minutes + "</strong> <small>phút</small>" : "";
     seconds = this.seconds !== 0 ? " <strong>" + this.seconds + "</strong> <small>giây</small>" : "";
-    this.formatTime();
     var countainer = document.getElementById(id);
     countainer.innerHTML = 
     years + months + days + hours + minutes + seconds +
     " <strong> " + this.msg + " </strong>";
     var self = this;
+
     setTimeout(function () { self.calculate(id); }, 1000);
 }
