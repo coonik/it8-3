@@ -39,12 +39,14 @@ CountUp.prototype.addLeadingZero=function(value){
 CountUp.prototype.calculate = function (id) {
     var currDate = new Date();
     var prevDate = this.beginDate;
-    this.seconds = this.datePartDiff(prevDate.getSeconds(), currDate.getSeconds(), 60);
-    this.minutes = this.datePartDiff(prevDate.getMinutes(), currDate.getMinutes(), 60);
-    this.hours = this.datePartDiff(prevDate.getHours(), currDate.getHours(), 24);
-    this.days = this.datePartDiff(prevDate.getDate(), currDate.getDate(), this.numOfDays[currDate.getMonth()]);
     this.years = this.datePartDiff(prevDate.getFullYear(), currDate.getFullYear());
-    this.months = this.datePartDiff(prevDate.getMonth(), currDate.getMonth(), 12);
+    this.months = this.datePartDiff(prevDate.getMonth()+1, currDate.getMonth()+1, 12) - 1;
+    this.days = this.datePartDiff(prevDate.getDate(), currDate.getDate(), this.numOfDays[currDate.getMonth()]);
+    this.hours = this.datePartDiff(prevDate.getHours(), currDate.getHours(), 24);
+    this.minutes = this.datePartDiff(prevDate.getMinutes(), currDate.getMinutes(), 60);
+    this.seconds = this.datePartDiff(prevDate.getSeconds(), currDate.getSeconds(), 60);
+    
+    years = this.years !== 0 ? " <strong>" + this.years + "</strong> <small>năm</small>" : "";
     months = this.months !== 0 ? " <strong>" + this.months + "</strong> <small>tháng</small>" : "";
     days = this.days !== 0 ? " <strong>" + this.days + "</strong> <small>ngày</small>" : "";
     hours = this.hours !== 0 ? " <strong>" + this.hours + "</strong> <small>giờ</small>" : "";
@@ -53,8 +55,7 @@ CountUp.prototype.calculate = function (id) {
     this.formatTime();
     var countainer = document.getElementById(id);
     countainer.innerHTML = 
-    " <strong>" + this.years + "</strong> <small>năm</small>" +
-    months + days + hours + minutes + seconds +
+    years + months + days + hours + minutes + seconds +
     " <strong> " + this.msg + " </strong>";
     var self = this;
     setTimeout(function () { self.calculate(id); }, 1000);
